@@ -11,7 +11,7 @@ import plots
 
 
 # Path and starid
-folder, starid = ("example", "Kepler-5")
+path, starid = ("example", "Kepler-5")
 
 
 # Whether to perform fit or analyse previously fitted data
@@ -46,9 +46,11 @@ exp_time = 0.
 np.random.seed(1)
 
 # Initialize log file 
+outputdir = os.path.join(path, starid + "/output")
+if not os.path.isdir(outputdir):
+    os.makedirs(outputdir)
 stdout = sys.stdout
-path = os.path.join(folder, starid)
-sys.stdout = ug.Logger(os.path.join(path, "log.txt"))
+sys.stdout = ug.Logger(os.path.join(outputdir, "log.txt"))
 
 # Print header
 print (88 * "=")
@@ -83,7 +85,7 @@ print (
 )
 
 # Load the transit data
-data = ug.load_data(path)
+data = ug.load_data(os.path.join(path, starid))
 tim, flux, sig = (data[:, 0], data[:, 1], data[:, 2])
 
 
@@ -116,20 +118,20 @@ if fit:
         #)
     
         # Write chain data
-        with open(os.path.join(path, 'chain.pkl'), 'wb') as fp:
+        with open(os.path.join(outputdir, 'chain.pkl'), 'wb') as fp:
             cPickle.dump(sampler.chain, fp)
 
 
 # Load stored MCMC chain
-with open(os.path.join(path, 'chain.pkl'), 'rb') as fp:
+with open(os.path.join(outputdir, 'chain.pkl'), 'rb') as fp:
     sampler_chain = cPickle.load(fp)
 
 # Plot fitting parameters as a function of step number
 _ = plots.plot_orbital_params(
-    sampler_chain, fname=os.path.join(path, 'orbital_params.png')
+    sampler_chain, fname=os.path.join(outputdir, 'orbital_params.png')
 )
 _ = plots.plot_ld_params(
-    sampler_chain, fname=os.path.join(path, 'ld_params.png')
+    sampler_chain, fname=os.path.join(outputdir, 'ld_params.png')
 )
 
 # Discard "BAD" samples based on error scale factor value
@@ -160,14 +162,14 @@ for i in range(ndim):
     print ("par, ner, per = %.8f, %0.8f, %0.8f" %(pars[i, 0], pars[i, 1], pars[i, 2]))
 
 # Make corner, light curve and phase diagrams
-_ = plots.distribution(samples, fname=os.path.join(path, 'corner.png'))
+_ = plots.distribution(samples, fname=os.path.join(outputdir, 'corner.png'))
 _ = plots.light_curve_fit(
     tim, flux, sig, pars, exp_time=exp_time, 
-    fname=os.path.join(path, 'light_curve.png')
+    fname=os.path.join(outputdir, 'light_curve.png')
 )
 _ = plots.phase_diagram(
     tim, flux, sig, pars, exp_time=exp_time/pars[0, 0], 
-    fname=os.path.join(path, 'phase_diagram.png')
+    fname=os.path.join(outputdir, 'phase_diagram.png')
 )
 
 # Calculate h1', h2' and cov(h1', h2') 

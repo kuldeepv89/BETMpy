@@ -162,6 +162,4 @@ cython_debug/
 #.idea/
 
 # KV added
-example/Kepler-5/*.png
-example/Kepler-5/*.pkl
-example/Kepler-5/*.txt
+example/Kepler-5/output
