@@ -159,7 +159,7 @@ for i in range(ndim):
     pars[i, 0] = np.percentile(samples[:, i], 50)
     pars[i, 1] = pars[i, 0] - np.percentile(samples[:, i], 16)
     pars[i, 2] = np.percentile(samples[:, i], 84) - pars[i, 0]
-    print ("par, ner, per = %.8f, %0.8f, %0.8f" %(pars[i, 0], pars[i, 1], pars[i, 2]))
+    print ("par, ner, per = %.10f, %0.10f, %0.10f" %(pars[i, 0], pars[i, 1], pars[i, 2]))
 
 # Make corner, light curve and phase diagrams
 _ = plots.distribution(samples, fname=os.path.join(outputdir, 'corner.png'))
