@@ -69,13 +69,17 @@ print (
 # Analysing star
 print ("Analysing star: %s\n" %(starid))
 
+# Load the transit data
+data = ug.load_data(os.path.join(path, starid))
+tim, flux, sig = (data[:, 0], data[:, 1], data[:, 2])
+
 # Print input parameters
 print ("Print input parameters...")
 print (
     "ndim, nwalkers, nsteps, nburn, lamda, exp_time = %d, %d, %d, %d, %.2e, %.2e" 
     %(ndim, nwalkers, nsteps, nburn, lamda, exp_time)
 )
-theta0 = ug.initial_guess(theta0)
+theta0 = ug.initial_guess(tim, flux, theta0)
 print (
     "theta0 = %.4f, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f, %.4f\n"
     %(
@@ -83,10 +87,6 @@ print (
         theta0[6], theta0[7], theta0[8], theta0[9]
     )
 )
-
-# Load the transit data
-data = ug.load_data(os.path.join(path, starid))
-tim, flux, sig = (data[:, 0], data[:, 1], data[:, 2])
 
 
 # Perform fit

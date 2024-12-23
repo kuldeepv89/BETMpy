@@ -34,7 +34,7 @@ def load_data(path):
 
 
 # Initial guess for fitting parameters
-def initial_guess(theta0):
+def initial_guess(tim, flux, theta0):
 
     # Estimate period 
     if theta0[0] is None:
