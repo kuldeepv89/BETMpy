@@ -25,9 +25,13 @@ def load_data(path):
     dataList = sorted(dataList)
     for i, filename in enumerate(dataList):
         if i == 0:
-            data = np.genfromtxt(os.path.join(path, filename), delimiter=",")
+            data = np.genfromtxt(
+                os.path.join(path, filename), delimiter=",", skip_header=1
+            )
         else:
-            tmp = np.genfromtxt(os.path.join(path, filename), delimiter=",")
+            tmp = np.genfromtxt(
+                os.path.join(path, filename), delimiter=",", skip_header=1
+            )
             data = np.vstack((data, tmp))
 
     return data 
